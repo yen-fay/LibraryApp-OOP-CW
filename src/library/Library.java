@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.time.temporal.ChronoUnit;
 /**
  * Write a description of class Library here.
  *
@@ -119,7 +120,7 @@ public class Library
 
     }
     public void returnBook()
-    { /*
+    {
         System.out.println("Enter your book loan ID: ");
         // does this have to be an integer?
         int bookloanID = input.nextInt();
@@ -138,11 +139,11 @@ public class Library
            }
 
        }
-       */
+
     }
     public void addNewBook()
     {
-        /*
+
         System.out.println("Enter the book title: ");
         String bTitle = input.next();
         //precheck
@@ -174,11 +175,11 @@ public class Library
         int bQuantity = input.nextInt();
 
         addNewBook(bTitle, bAuthorList, year, bQuantity);
-    */
+
     }
     public void addNewBook(String bTitle, String[] bAuthor, int year, int bQuantity)
     {
-        /*
+
         int x = bookList.size() - 1;
         Book y = bookList.get(x);
         int z = y.bookID + 1;
@@ -187,22 +188,22 @@ public class Library
         bookList.add(object);
         System.out.println("The book has been added.");
         //Do we need to print out the book list?
-        */
+
     }
     public void addNewMember()
     {
         // put your code here
-        /*
+
         System.out.println("Enter your first name: ");
         String firstName = input.next();
         System.out.println("Enter your last name: ");
         String lastName = input.next();
 
         addNewMember(firstName, lastName, LocalDate.now());
-        */
+
     }
     public void addNewMember(String firstName, String lastName, LocalDate date)
-    {  /*
+    {
         int x = memberList.size() - 1;
         Member y = memberList.get(x);
         int z = y.memberID + 1;
@@ -210,7 +211,7 @@ public class Library
         memberList.add(object);
         System.out.println("The member has been added. ");
         //Precheck? to see if the member is already there?
-        */
+
     }
     public void changeQuantity()
     {
