@@ -5,7 +5,6 @@ import java.util.Scanner;
 import java.time.LocalDate;
 import java.io.File;
 import java.io.FileNotFoundException;
-import static ch.lambdaj.Lambda.*;
 /**
  * Write a description of class Library here.
  *
@@ -120,23 +119,143 @@ public class Library
 
     }
     public void returnBook()
-    {
-        // put your code here
+    { /*
+        System.out.println("Enter your book loan ID: ");
+        // does this have to be an integer?
+        int bookloanID = input.nextInt();
+        for (int i = 0; i < loansList.size(); i++)
+        {
+            if (loansList.get(i).bookLoanID == bookloanID)
+            {
+                if ((loansList.get(i).dateBorrowed == LocalDate.now()) || (loansList.get(i).dateBorrowed < LocalDate.now()) )
+                {
 
+               }
+               else{
+                   long daysBetween = DAYS.between(loansList.get(i).dateBorrowed, LocalDate.now());
+
+                }
+           }
+
+       }
+       */
     }
     public void addNewBook()
     {
-        // put your code here
+        /*
+        System.out.println("Enter the book title: ");
+        String bTitle = input.next();
+        //precheck
+        for (int i = 0; i < bookList.size(); i++)
+        {
+            if (bookList.get(i).title == bTitle)
+            {
+                System.out.println("This book already exists. Would you like to continue? (Y/N)");
+                String answer = input.next();
 
+                if ((answer == "Y")|| (answer == "y")){
+                    break;
+            }
+                else if ((answer == "N") || (answer == "n")){
+                    LibraryApp.getUserInput();
+                }
+                else {
+                    //Needs to go back to the Y/N bit
+            }
+        }
+
+    }
+        System.out.println("Enter the book author(s): ");
+        String bAuthor = input.next();
+        String[] bAuthorList = bAuthor.split(":");
+        System.out.println("Enter the year of publishing: ");
+        int year = input.nextInt();
+        System.out.println("Enter the quantity of books added: ");
+        int bQuantity = input.nextInt();
+
+        addNewBook(bTitle, bAuthorList, year, bQuantity);
+    */
+    }
+    public void addNewBook(String bTitle, String[] bAuthor, int year, int bQuantity)
+    {
+        /*
+        int x = bookList.size() - 1;
+        Book y = bookList.get(x);
+        int z = y.bookID + 1;
+
+        Book object = new Book (z, bTitle, bAuthor, year, bQuantity);
+        bookList.add(object);
+        System.out.println("The book has been added.");
+        //Do we need to print out the book list?
+        */
     }
     public void addNewMember()
     {
         // put your code here
+        /*
+        System.out.println("Enter your first name: ");
+        String firstName = input.next();
+        System.out.println("Enter your last name: ");
+        String lastName = input.next();
 
+        addNewMember(firstName, lastName, LocalDate.now());
+        */
+    }
+    public void addNewMember(String firstName, String lastName, LocalDate date)
+    {  /*
+        int x = memberList.size() - 1;
+        Member y = memberList.get(x);
+        int z = y.memberID + 1;
+        Member object = new Member (z,firstName, lastName, date);
+        memberList.add(object);
+        System.out.println("The member has been added. ");
+        //Precheck? to see if the member is already there?
+        */
     }
     public void changeQuantity()
     {
-        // put your code here
+        System.out.println("Enter the book title: ");
+        String btitle = input.next();
+        System.out.println("Enter the quantity you want to change ('-' decreasing) ");
+        int stockQuan = input.nextInt();
+        changeQuantity(btitle, stockQuan);
+
+    }
+    public void changeQuantity(String bookTitle, int bquantity)
+    {
+        int available_copy;
+        for (int i = 0; i < bookList.size(); i++)
+        {
+            if (bookTitle == bookList.get(i).title)
+            {
+                int number_of_copys = bookList.get(i).quantity;
+                int ID = bookList.get(i).bookID;
+                int number_on_loan = 0;
+                for (int j = 0; j < bookList.size(); j++)
+                { if (ID == loansList.get(i).bookID)
+                {
+                    number_on_loan = number_on_loan + 1;
+                }
+                }
+                available_copy = number_of_copys - number_on_loan;
+                //int newStock = available_copy + quantity;
+                if (bquantity < 0 )
+                {
+                    if (available_copy > Math.abs(bquantity))
+                    {
+                        int newStock = number_of_copys + bquantity;
+                        bookList.get(i).quantity = newStock;
+
+                    } else{
+                        System.out.println("The quantity you want decrease the stock by is more than the available number of copys");
+                        changeQuantity();
+                    }
+                } else {
+                    int newStock = bookList.get(i).quantity + bquantity;
+                    bookList.get(i).quantity = newStock;
+                }
+            }
+        }
 
     }
     public void saveChanges()
