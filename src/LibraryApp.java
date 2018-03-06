@@ -24,6 +24,7 @@ public class LibraryApp
        System.out.println("**************************************************");
        Library lib = new Library("data/books.txt","data/members.txt",
        "data/bookloans.txt");
+
        lib.showAllBooks();    // show all the book records
        lib.showAllMembers();  // show all the member records
        lib.showAllBookLoans();// show all the book loan records
@@ -46,7 +47,7 @@ public class LibraryApp
        System.out.println("**************************************************");
        System.out.println("* Save the changes ...");
        System.out.println("**************************************************");
-       //lib.saveChanges("data/books.txt","data/members.txt","data/bookloans.txt");
+       lib.saveChanges("data/books.txt","data/members.txt","data/bookloans.txt");
        
        System.out.println("Bye ...");  
     } 
