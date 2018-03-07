@@ -164,25 +164,57 @@ public class Library
     }
     public void borrowBook()
     {
-        System.out.println("Enter your first name: ");
-        String firstName = input.nextLine();
-        System.out.println("Enter your last name: ");
-        String lastName = input.nextLine();
-        System.out.println("Enter the title of the book you want to borrow: ");
-        String bookTitle = input.nextLine();
-        for (int i = 0; i < bookList.size(); i++ ) {
-            if (bookList.get(i).title.toLowerCase().contains(bookTitle)) {
-                System.out.println(bookList.get(i).title);
+        String lastName = "";
+        String firstName = "";
+        String bookTitle ;
+        int count = 0;
+        boolean isValidInput = false;
+        while (isValidInput == false) {
+            System.out.println("Enter your first name: ");
+            firstName = input.nextLine();
+            System.out.println("Enter your last name: ");
+            lastName = input.nextLine();
+            for (int j = 0; j < memberList.size(); j++) {
+                if (firstName.equalsIgnoreCase(memberList.get(j).firstName) && (lastName.equalsIgnoreCase((memberList.get(j).lastName)))) {
+                    isValidInput = true;
+                    break;
+                } else if (j == memberList.size() - 1 && !firstName.equalsIgnoreCase(memberList.get(j).firstName) && (!lastName.equalsIgnoreCase((memberList.get(j).lastName)))) {
+                    System.out.println("Invalid Input");
+                }
+            }
+        }
+        isValidInput = false;
+        while(isValidInput == false){
+            System.out.println("Enter a keyword: ");
+            bookTitle = input.nextLine();
+            System.out.println("*******************");
+            for (int i = 0; i < bookList.size(); i++ ) {
+
+                if (bookList.get(i).title.toLowerCase().contains(bookTitle.toLowerCase())) {
+                    System.out.println("ID: "+bookList.get(i).bookID);
+                    System.out.println("Title: " + bookList.get(i).title);
+                    System.out.println("Author(s): ");
+                    for (int a = 0; a < bookList.get(i).author.length; a++) {
+                        System.out.println(bookList.get(i).author[a]);
+                    }
+                    System.out.println("Year: "+bookList.get(i).yearPublished);
+                    System.out.println("Number of copies: "+bookList.get(i).quantity);
+                    count = count + 1;
+                    isValidInput = true;
+                }
+            }
+            if (count == 0)
+            {
+                System.out.println("No books containing the keyword exists. ");
             }
         }
         System.out.println("Please pick a book: ");
         String bTitle = input.nextLine();
+
         borrowBook(bTitle, firstName, lastName);
     }
     public void borrowBook(String bTitle, String first_name, String last_name) {
-        boolean isbValidInput = false;
-        boolean ismValidInput = false;
-        boolean isblValidInput = false;
+        boolean isacValidInput = false;
         boolean isValidInput = false;
         int mID = 0;
         int x = 0;
@@ -191,17 +223,17 @@ public class Library
         int bQuantity = 0;
 
         for (int i = 0; i < bookList.size(); i++) {
-
             if (bTitle.equalsIgnoreCase(bookList.get(i).title)) {
-                isbValidInput = true;
                 bID = bookList.get(i).bookID;
                 bQuantity = bookList.get(i).quantity;
+                break;
+            }else if (i == bookList.size() - 1 && !bTitle.equalsIgnoreCase(bookList.get(i).title)){
+                System.out.println("The book you've entered doesn't exist");
 
             }
         }
         for (int j = 0; j < memberList.size() - 1; j++) {
             if (first_name.equalsIgnoreCase(memberList.get(j).firstName) && last_name.equalsIgnoreCase(memberList.get(j).lastName)) {
-                ismValidInput = true;
                 mID = memberList.get(j).memberID;
             }
         }
@@ -214,8 +246,8 @@ public class Library
             }
         }
         int available_copy = bQuantity - number_on_loan;
-        if (available_copy >= 0) {
-            isblValidInput = true;
+        if (available_copy > 0) {
+            isacValidInput = true;
         } else {
             System.out.println("No copies available to take on loan");
         }
@@ -226,25 +258,16 @@ public class Library
         }
 
 
-        if (isValidInput == true && isbValidInput == true && isblValidInput == true && ismValidInput == true) {
+        if (isValidInput && isacValidInput) {
             int a = loansList.size() - 1;
-            System.out.println();
             BookLoans b = loansList.get(a);
             int c = b.bookLoanID + 1;
             BookLoans object = new BookLoans(c, bID, mID, LocalDate.now());
             loansList.add(object);
-            /*
-            for (int i = 0; i < bookList.size() - 1; i++)
-            {
-                if (bTitle == bookList.get(i).title)
-                {
-                    bookList.get(i).quantity = bookList.get(i).quantity - 1;
-
-                }
-            }
-            */
+            System.out.println("Your book has been loaned");
         }
     }
+
 
     public void returnBook()
     {
