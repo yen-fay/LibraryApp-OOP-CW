@@ -3,3 +3,7 @@
 100003,Data Scientists at Work,Sebastian Gutierrez,1999,3
 100004,OO Design Using Java,James Nino:Frederick Hosch,1988,3
 100005,Objects First with Java,David Barnes:Michael Kolling,2001,4
+100006,Physics and Philosophy,Werner Heisenberg,1978,4
+100007,Making Software,Andy Oram,1982,5
+100008,Data Mining Handbook,Fay Ong,2018,5
+100009,Neural Networking,Tariq Rashid: Niha Gummakonda,2018,5

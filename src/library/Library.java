@@ -1,10 +1,7 @@
 package library;
 
-import javax.swing.text.DateFormatter;
 import java.io.*;
-import java.text.DateFormat;
 import java.util.ArrayList;
-import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.io.File;
@@ -14,7 +11,6 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
 
 /**
  * Write a description of class Library here.
@@ -64,6 +60,7 @@ public class Library
         }
       }
     }
+
     catch(FileNotFoundException ex){
         System.out.println(ex);
     }
@@ -143,9 +140,8 @@ public class Library
     }
     public void searchMember()
     {
-        System.out.println("Please input a first name:");
+        System.out.println("Please input a first name and last name:");
         String first_name = input.next();
-        System.out.println("Please input a last name:");
         String last_name = input.next();
         searchMember(first_name, last_name);
     }
@@ -280,78 +276,60 @@ public class Library
                         System.out.println("Your book is returned");
                         break;
                     }
-
-
                 }
             }else if (i == loansList.size() - 1 && bID != loansList.get(i).bookLoanID){
                 System.out.println("The book loan ID doesn't exist");
                     break;
             }
-
-
-
         }
-
-
     }
     public void addNewBook()
     {
+        String answer;
+        boolean isFound = false;
 
-        System.out.println("Enter the book title: ");
+        System.out.println("Enter the book title:");
         String bTitle = input.nextLine();
+        for (int i = 0; i < bookList.size(); i++) {
+            if (bTitle.equalsIgnoreCase(bookList.get(i).title)) {
+                isFound = true;
+                System.out.println("This book already exists. Would you like to continue? [Y/N]");
+                answer = input.next();
+                input.nextLine();
 
-        System.out.println("Enter the book author(s): ");
-        String bAuthor = input.nextLine();
-        String[] bAuthorList = bAuthor.split(":");
-        System.out.println("Enter the year of publishing: ");
-        int year = input.nextInt();
-        input.nextLine();
-        System.out.println("Enter the quantity of books added: ");
-        int bQuantity = input.nextInt();
-        input.nextLine();
-        addNewBook(bTitle, bAuthorList, year, bQuantity);
-
+                if (answer.equalsIgnoreCase("Y")) {
+                    isFound = false;
+                    break;
+                }
+            }
+        }
+        if (isFound == false){
+            System.out.println("Enter the book author: (For multiple authors, separate using a colon ':')");
+            String bAuthor = input.nextLine();
+            String[] bAuthorList = bAuthor.split(":");
+            System.out.println("Enter the year of publishing:");
+            int year = input.nextInt();
+            input.nextLine();
+            System.out.println("Enter the quantity of books added:");
+            int bQuantity = input.nextInt();
+            input.nextLine();
+            addNewBook(bTitle, bAuthorList, year, bQuantity);
+        }
     }
     public void addNewBook(String bTitle, String[] bAuthorList, int year, int bQuantity)
     {
+        boolean isFound = false;
 
-        String answer;
-        for (int i = 0; i < bookList.size(); i++)
-        {
-            if (bTitle.equalsIgnoreCase( bookList.get(i).title))
-            {    do {
-                    System.out.println("This book already exists. Would you like to continue? (Y/N)");
-                    answer = input.next();
-                    if ((answer.equalsIgnoreCase("Y"))){
-                        int x = bookList.size() - 1;
-                        Book y = bookList.get(x);
-                        int z = y.bookID + 1;
+        if (isFound == false){
+            int x = bookList.size() - 1;
+            Book y = bookList.get(x);
+            int z = y.bookID + 1;
 
-                        Book object = new Book (z, bTitle, bAuthorList, year, bQuantity);
-                        bookList.add(object);
-                        System.out.println("The book has been added.");
-                        showAllBooks();
-                        break;
-                    }
-                }while ((!answer.equalsIgnoreCase("Y")) && (!answer.equalsIgnoreCase("N")));
-
-
-            }else if (i == bookList.size()){
-                int x = bookList.size() - 1;
-                Book y = bookList.get(x);
-                int z = y.bookID + 1;
-
-                Book object = new Book (z, bTitle, bAuthorList, year, bQuantity);
-                bookList.add(object);
-                System.out.println("The book has been added.");
-                showAllBooks();
-                break;
-            }
+            Book object = new Book(z, bTitle, bAuthorList, year, bQuantity);
+            bookList.add(object);
+            System.out.println("The book has been added.");
+            showAllBooks();
         }
-
-
-
-        //Do we need to print out the book list?
     }
     public void addNewMember()
     {
@@ -360,7 +338,6 @@ public class Library
         System.out.println("Enter your last name:");
         String lastName = input.next();
         addNewMember(firstName, lastName, LocalDate.now());
-
     }
     public void addNewMember(String firstName, String lastName, LocalDate date)
     {
@@ -430,12 +407,7 @@ public class Library
             {
                 System.out.print("No such book exists");
             }
-
-
         }
-
-
-
     }
     public void saveChanges(String books, String members, String bookLoans)
     {
