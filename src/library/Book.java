@@ -3,9 +3,10 @@ package library;
 /**
  * Write a description of class Book here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author 670060628 & 670024613
+ * @version 1.0 18/02/2018
  */
+
 public class Book
 {
   int bookID, yearPublished, quantity;
@@ -15,6 +16,7 @@ public class Book
     /**
      * Constructor for objects of class Book
      */
+
     public Book(int book_ID, String book_title, String[] book_author, int year, int book_quantity)
     {
         bookID = book_ID;

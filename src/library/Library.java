@@ -13,10 +13,15 @@ import java.io.OutputStreamWriter;
 import java.time.temporal.ChronoUnit;
 
 /**
- * Write a description of class Library here.
+ * Library.java
+ * Purpose: To emulate a library management application
  *
- * @author
- * @version (a version number or a date)
+ * @author 670060628 & 670024613
+ * @version 1.0 13/03/2018
+ */
+
+/**
+ * Scans for input to then be sorted into different lists
  */
 public class Library
 {
@@ -24,9 +29,7 @@ public class Library
     ArrayList<Book> bookList = new ArrayList<>();
     ArrayList<Member> memberList = new ArrayList<>();
     ArrayList<BookLoans> loansList = new ArrayList<>();
-    /**
-     * Constructor for objects of class Library
-     */
+
     public Library(String books, String members, String bookLoans)
     {
       FileImport(books, "b");
@@ -238,68 +241,69 @@ public class Library
             System.out.println("*********************************************");
             System.out.println("No books containing the keyword exists. ");
             System.out.println("*********************************************");
-        }
+        } else {
 
-        System.out.println("****************************************");
-        System.out.println("Please enter the book title: ");
-        String bookTitle = input.nextLine();
-
-        for (int i = 0; i < bookList.size(); i++) {
-            if (bookTitle.equalsIgnoreCase(bookList.get(i).title)) {
-                bID = bookList.get(i).bookID;
-                bQuantity = bookList.get(i).quantity;
-                foundBook = true;
-                break;
-            }else if (i == bookList.size() - 1 && !bookTitle.equalsIgnoreCase(bookList.get(i).title)){
-                System.out.println("****************************************");
-                System.out.println("The book you've entered doesn't exist");
-                System.out.println("****************************************");
-
-            }
-        }
-        for (Member aMemberList : memberList) {
-            if (first_name.equalsIgnoreCase(aMemberList.firstName) && last_name.equalsIgnoreCase(aMemberList.lastName)) {
-                mID = aMemberList.memberID;
-            }
-        }
-        int number_on_loan = 0;
-        for (BookLoans aLoansList : loansList) {
-            if (mID == aLoansList.memberID) {
-                x = x + 1;
-            }
-            if (bID == aLoansList.bookID) {
-                number_on_loan = number_on_loan + 1;
-            }
-        }
-        int available_copy = bQuantity - number_on_loan;
-        if (foundBook) {
-            if (available_copy == 0) {
-                System.out.println("****************************************");
-                System.out.println("No copies available to take on loan");
-                System.out.println("****************************************");
-            } else {
-                isacValidInput = true;
-            }
-
-            if (x < 5) {
-                isValidInput = true;
-            } else {
-                System.out.println("********************************************************");
-                System.out.println("You already have 5 books out, can't take out more");
-                System.out.println("********************************************************");
-            }
-        }
-
-
-        if (isValidInput && isacValidInput) {
-            int a = loansList.size() - 1;
-            BookLoans b = loansList.get(a);
-            int c = b.bookLoanID + 1;
-            BookLoans object = new BookLoans(c, bID, mID, LocalDate.now());
-            loansList.add(object);
             System.out.println("****************************************");
-            System.out.println("Your book has been loaned");
-            System.out.println("****************************************");
+            System.out.println("Please enter the book title: ");
+            String bookTitle = System.console().readLine();
+
+            for (int i = 0; i < bookList.size(); i++) {
+                if (bookTitle.equalsIgnoreCase(bookList.get(i).title)) {
+                    bID = bookList.get(i).bookID;
+                    bQuantity = bookList.get(i).quantity;
+                    foundBook = true;
+                    break;
+                } else if (i == bookList.size() - 1 && !bookTitle.equalsIgnoreCase(bookList.get(i).title)) {
+                    System.out.println("****************************************");
+                    System.out.println("The book you've entered doesn't exist");
+                    System.out.println("****************************************");
+
+                }
+            }
+            for (Member aMemberList : memberList) {
+                if (first_name.equalsIgnoreCase(aMemberList.firstName) && last_name.equalsIgnoreCase(aMemberList.lastName)) {
+                    mID = aMemberList.memberID;
+                }
+            }
+            int number_on_loan = 0;
+            for (BookLoans aLoansList : loansList) {
+                if (mID == aLoansList.memberID) {
+                    x = x + 1;
+                }
+                if (bID == aLoansList.bookID) {
+                    number_on_loan = number_on_loan + 1;
+                }
+            }
+            int available_copy = bQuantity - number_on_loan;
+            if (foundBook) {
+                if (available_copy == 0) {
+                    System.out.println("****************************************");
+                    System.out.println("No copies available to take on loan");
+                    System.out.println("****************************************");
+                } else {
+                    isacValidInput = true;
+                }
+
+                if (x < 5) {
+                    isValidInput = true;
+                } else {
+                    System.out.println("********************************************************");
+                    System.out.println("You already have 5 books out, can't take out more");
+                    System.out.println("********************************************************");
+                }
+            }
+
+
+            if (isValidInput && isacValidInput) {
+                int a = loansList.size() - 1;
+                BookLoans b = loansList.get(a);
+                int c = b.bookLoanID + 1;
+                BookLoans object = new BookLoans(c, bID, mID, LocalDate.now());
+                loansList.add(object);
+                System.out.println("****************************************");
+                System.out.println("Your book has been loaned");
+                System.out.println("****************************************");
+            }
         }
     }
 
@@ -329,7 +333,7 @@ public class Library
                     String answer;
                     String pound = ("\u00A3");
                     do {
-                        System.out.println("Your book is overdue. You must pay the fine of " +pound  + fine + ". Would you like to pay and return the book? (y/n)");
+                        System.out.println("Your book is overdue. You must pay the fine of " + pound  + fine + ". Would you like to pay and return the book? (y/n)");
                         answer = input.next();
                     } while (!answer.equalsIgnoreCase("N") && !answer.equalsIgnoreCase( "Y"));
                     if (answer.equalsIgnoreCase("Y")){

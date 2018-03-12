@@ -4,9 +4,10 @@ import java.time.LocalDate;
 /**
  * Write a description of class BookLoans here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author 670060628 & 670024613
+ * @version 1.0 18/02/2018
  */
+
 public class BookLoans
 {
     int bookLoanID, bookID, memberID;
@@ -15,6 +16,7 @@ public class BookLoans
     /**
      * Constructor for objects of class BookLoans
      */
+
     public BookLoans(int bookLoan_ID, int book_ID, int member_ID, LocalDate date_Borrowed)
     {
        bookLoanID = bookLoan_ID;

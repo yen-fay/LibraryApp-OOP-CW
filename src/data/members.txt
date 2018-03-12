@@ -8,5 +8,4 @@
 200008,Fay,Ong,2018-03-06
 200009,Harper,Ford,2018-03-06
 200010,Jordan,Chillie,2018-03-07
-200011,Prince,Woy,2018-03-11
-200012,Hongping,Cai,2018-03-12
+200011,Kamila,Hoffmann-Derlacka,2018-03-08
