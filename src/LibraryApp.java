@@ -74,7 +74,7 @@ public class LibraryApp
                     lib.searchMember("Sarah","Hoopern");
                     break;
                case 'b': case 'B'://borrow one book
-                    lib.borrowBook("Data","J","Cooper");
+                    lib.borrowBook("Data","John","Cooper");
                     break;
                case 'r': case 'R'://return one book via the book loan Id
                     lib.returnBook(300002);
