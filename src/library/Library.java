@@ -2,6 +2,7 @@ package library;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.time.LocalDate;
 import java.io.File;
@@ -16,7 +17,8 @@ import java.time.temporal.ChronoUnit;
  * Library.java
  * Purpose: To emulate a library management application
  *
- * @author 670060628 & 670024613
+ * @author 670060628
+ * @author 670024613
  * @version 1.0 13/03/2018
  */
 
@@ -30,12 +32,24 @@ public class Library
     ArrayList<Member> memberList = new ArrayList<>();
     ArrayList<BookLoans> loansList = new ArrayList<>();
 
+    /**
+     * Imports the CSV files
+     * @param books
+     * @param members
+     * @param bookLoans
+     */
     public Library(String books, String members, String bookLoans)
     {
       FileImport(books, "b");
       FileImport(members, "m");
       FileImport(bookLoans, "l");
     }
+
+    /**
+     * Creates objects and adds them to their respective lists
+     * @param filepath
+     * @param type
+     */
     public void FileImport(String filepath, String type)
     {
      File newFile = new File(filepath);
@@ -65,15 +79,12 @@ public class Library
           }
       }
     }
-
     catch(FileNotFoundException ex){
         System.out.println(ex);
     }
 }
     /**
-     * An example of a method - replace this comment with your own
-     *
-     * @return    the sum of x and y
+     * Prints out the list of all the books
      */
     public void showAllBooks()
     {
@@ -89,6 +100,10 @@ public class Library
             System.out.print("," + x.yearPublished + "," + x.quantity + "\n");
         }
     }
+
+    /**
+     * Prints out the list of all the members
+     */
     public void showAllMembers()
     {
      System.out.println("Members:");
@@ -96,6 +111,10 @@ public class Library
             System.out.println(y.memberID + "," + y.firstName + "," + y.lastName + "," + y.dateJoined);
         }
     }
+
+    /**
+     * Prints out the list of all the book loans
+     */
     public void showAllBookLoans()
     {
      System.out.println("Book Loans:");
@@ -103,18 +122,29 @@ public class Library
             System.out.println(z.bookLoanID + "," + z.bookID + "," + z.memberID + "," + z.dateBorrowed);
         }
     }
+
+    /**
+     * Asks for input then passes the information to the next method to search for books
+     */
     public void searchBook()
     {
      System.out.println("Please input a keyword(s):");
      String bTitle = input.nextLine();
      searchBook(bTitle);
     }
+
+    /**
+     * Uses partial matching of the input to search through the book list and outputs matching book information
+     * @param bTitle A String representing a book title
+     */
     public void searchBook(String bTitle)
     {
         int counter = 0;
+
         for (Book aBookList : bookList) {
             if (aBookList.title.toLowerCase().contains(bTitle.toLowerCase())) {
                 Book a = aBookList;
+                System.out.println("****************************************");
                 System.out.println("Book ID: " + a.bookID);
                 System.out.println("Title: " + a.title);
                 System.out.print("Author: ");
@@ -126,8 +156,16 @@ public class Library
                 }
                 System.out.println("\n" + "Year Published: " + a.yearPublished);
                 System.out.println("Total Quantity: " + a.quantity);
-                // gotta include number available
-                System.out.println("********************");
+
+                int number_on_loan = 0;
+                for (BookLoans aLoansList : loansList) {
+                    if (a.bookID == aLoansList.bookID) {
+                        number_on_loan += 1;
+                    }
+                }
+                int available_copy = a.quantity - number_on_loan;
+                System.out.println("Number of Books Available: " + available_copy);
+                System.out.println("****************************************");
                 counter += 1;
             }
         }
@@ -136,6 +174,10 @@ public class Library
             System.out.println("Invalid keyword. Please try again.");
         }
     }
+
+    /**
+     * Asks for input then passes the information to the next method to search for members
+     */
     public void searchMember()
     {
         System.out.println("Please input a first name and last name:");
@@ -143,6 +185,12 @@ public class Library
         String last_name = input.next();
         searchMember(first_name, last_name);
     }
+
+    /**
+     * Takes the input given and searches through the member list to output member information
+     * @param first_name A String representing the member's first name
+     * @param last_name A String representing the member's last name
+     */
     public void searchMember(String first_name, String last_name)
     {
         int memberCount = 0;
@@ -150,11 +198,11 @@ public class Library
         for (Member aMemberList : memberList) {
             if (aMemberList.firstName.toLowerCase().equals(first_name.toLowerCase()) && aMemberList.lastName.toLowerCase().equals(last_name.toLowerCase())) {
                 Member c = aMemberList;
-                System.out.println("**************************");
+                System.out.println("**********************************************");
                 System.out.println("ID: " + c.memberID);
                 System.out.println("Name: " + c.firstName + " " + c.lastName);
                 System.out.println("Date Joined: " + c.dateJoined);
-                System.out.println("**************************");
+                System.out.println("**********************************************");
                 for (BookLoans aLoansList : loansList) {
                     if (c.memberID == aLoansList.memberID) {
                         bookCount += 1;
@@ -167,7 +215,7 @@ public class Library
                         }
                         System.out.println("Date Borrowed: " + d.dateBorrowed);
                         System.out.println("Due Date: " + d.dateBorrowed.plusDays(30));
-                        System.out.println("**************************");
+                        System.out.println("**********************************************");
                     }
                 }
                 System.out.println("Number of Books on Loan: " + bookCount);
@@ -179,16 +227,17 @@ public class Library
             System.out.println("Member not found. Please try again.");
         }
     }
+
     /**
-     * This method checks if the member is valid .
-     *
-     * @return    the sum of x and y
+     * This method asks for user input such as name and keyword.
+     * It checks if the member exists and then passes the variables as arguments
+     * into the next borrow book method.
      */
     public void borrowBook()
     {
         String lastName = "" ;
         String firstName = "";
-        String bookTitle ;
+        String bookTitle;
         boolean isValidInput = false;
         while (!isValidInput) {
             System.out.println("Enter your first and last name: ");
@@ -199,15 +248,25 @@ public class Library
                     isValidInput = true;
                     break;
                 } else if (j == memberList.size() - 1 && !firstName.equalsIgnoreCase(memberList.get(j).firstName) && (!lastName.equalsIgnoreCase((memberList.get(j).lastName)))) {
-                    System.out.println("Invalid Input");
+                    System.out.println("The member doesn't exist. Please try again.");
                 }
             }
         }
-            System.out.println("Enter a keyword: ");
-            bookTitle = input.nextLine();
-
+        System.out.println("Enter a keyword: ");
+        bookTitle = System.console().readLine();
         borrowBook(bookTitle, firstName, lastName);
     }
+
+    /**
+     * This method takes in arguments from either the user input in borrow book method without parameters
+     * or the fixed input values given in the LibraryApp. It checks if the book exists (uses partial searching),
+     * if there are available copies and if the member already has 5 books on loan.
+     * If all is successful, the book is loaned
+     *
+     * @param bTitle A String that is entered to allow partial search to take place
+     * @param first_name A String representing the member's first name
+     * @param last_name A String representing the member's last name
+     */
     public void borrowBook(String bTitle, String first_name, String last_name) {
         boolean isacValidInput = false;
         boolean isValidInput = false;
@@ -222,7 +281,6 @@ public class Library
         System.out.println("****************************************");
         for (Book aBookList : bookList) {
             if (aBookList.title.toLowerCase().contains(bTitle.toLowerCase())) {
-                System.out.println("****************************************");
                 System.out.println("ID: " + aBookList.bookID);
                 System.out.println("Title: " + aBookList.title);
                 System.out.print("Author(s): ");
@@ -268,10 +326,10 @@ public class Library
             int number_on_loan = 0;
             for (BookLoans aLoansList : loansList) {
                 if (mID == aLoansList.memberID) {
-                    x = x + 1;
+                    x += 1;
                 }
                 if (bID == aLoansList.bookID) {
-                    number_on_loan = number_on_loan + 1;
+                    number_on_loan += 1;
                 }
             }
             int available_copy = bQuantity - number_on_loan;
@@ -293,7 +351,6 @@ public class Library
                 }
             }
 
-
             if (isValidInput && isacValidInput) {
                 int a = loansList.size() - 1;
                 BookLoans b = loansList.get(a);
@@ -307,13 +364,26 @@ public class Library
         }
     }
 
-
+    /**
+     * This method asks for the bookloan ID.
+     */
     public void returnBook()
     {
-        System.out.print("Enter your book loan ID: ");
-        int bookLoanID = input.nextInt();
-        returnBook(bookLoanID);
+        try {
+            System.out.print("Enter your book loan ID: ");
+            int bookLoanID = input.nextInt();
+            returnBook(bookLoanID);
+        }catch(InputMismatchException e){
+            System.out.println("Input entered is not an integer");
+        }
     }
+
+    /**
+     * This method checks if the bookloan ID exists and also checks if the book is overdue.
+     * If it is, it then calculates the fine due and gives the user a choice of whether to
+     * pay the fine or not.
+     * @param bID An integer representing the bookloan ID
+     */
     public void returnBook(int bID)
     {
         for (int i = 0; i < loansList.size(); i++) {
@@ -325,36 +395,38 @@ public class Library
                     System.out.println("Your book is returned");
                     System.out.println("****************************************");
                     break;
-                    //Add quantity to book list?
                 } else {
                     long daysBetween = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
-                    //What data type should fine be?
-                    double fine = (int) daysBetween * 0.1;
+                    float fine = (float) daysBetween * 10/100;
                     String answer;
                     String pound = ("\u00A3");
                     do {
-                        System.out.println("Your book is overdue. You must pay the fine of " + pound  + fine + ". Would you like to pay and return the book? (y/n)");
+                        System.out.println("Your book is overdue. You must pay the fine of " + pound  + fine + "0, would you like to pay and return the book? (y/n)");
                         answer = input.next();
                     } while (!answer.equalsIgnoreCase("N") && !answer.equalsIgnoreCase( "Y"));
-                    if (answer.equalsIgnoreCase("Y")){
+                    if (answer.equalsIgnoreCase("Y")) {
                         loansList.remove(i);
                         System.out.println("****************************************");
                         System.out.println("Your book is returned");
                         System.out.println("****************************************");
                         break;
-                    }else if(answer.equalsIgnoreCase(("N")));
-                    {
+                    }else if(answer.equalsIgnoreCase(("N"))) {
                         break;
                     }
                 }
-            }else if (i == loansList.size() - 1 && bID != loansList.get(i).bookLoanID){
+            } else if (i == loansList.size() - 1 && bID != loansList.get(i).bookLoanID) {
                 System.out.println("****************************************");
                 System.out.println("The book loan ID doesn't exist");
                 System.out.println("****************************************");
-                    break;
+                break;
             }
         }
     }
+
+    /**
+     * Take general book information and checks whether the book title already exists in the system
+     * and gives the user the option to continue adding the book or not.
+     */
     public void addNewBook()
     {
         String answer;
@@ -381,19 +453,29 @@ public class Library
             System.out.println("Enter the book author: (For multiple authors, separate using a colon ':')");
             String bAuthor = input.nextLine();
             String[] bAuthorList = bAuthor.split(":");
-            System.out.println("Enter the year of publishing:");
-            int year = input.nextInt();
-            input.nextLine();
-            System.out.println("Enter the quantity of books added:");
-            int bQuantity = input.nextInt();
-            input.nextLine();
-            addNewBook(bTitle, bAuthorList, year, bQuantity);
+            try {
+                System.out.println("Enter the year of publishing:");
+                int year = input.nextInt();
+                input.nextLine();
+                System.out.println("Enter the quantity of books added:");
+                int bQuantity = input.nextInt();
+                input.nextLine();
+                addNewBook(bTitle, bAuthorList, year, bQuantity);
+            }catch (InputMismatchException e){
+                System.out.println("Input entered is not an integer");
+            }
         }
     }
+
+    /**
+     * Adds the new book to the book list
+     * @param bTitle A String representing the book title
+     * @param bAuthorList A list representing the book authors
+     * @param year An integer representing the book publish year
+     * @param bQuantity An integer stating the total number of books
+     */
     public void addNewBook(String bTitle, String[] bAuthorList, int year, int bQuantity)
     {
-
-
             int x = bookList.size() - 1;
             Book y = bookList.get(x);
             int z = y.bookID + 1;
@@ -404,8 +486,11 @@ public class Library
             System.out.println("The book has been added.");
             System.out.println("****************************************");
             showAllBooks();
-
     }
+
+    /**
+     * This method takes a user's name as input
+     */
     public void addNewMember()
     {
         System.out.println("Enter your first name:");
@@ -414,6 +499,14 @@ public class Library
         String lastName = input.next();
         addNewMember(firstName, lastName, LocalDate.now());
     }
+
+    /**
+     * This method adds the new member to the member list
+     * along with the date joined assuming that it's the current date
+     * @param firstName A String representing the member's first name
+     * @param lastName A String representing the member's last name
+     * @param date The current date
+     */
     public void addNewMember(String firstName, String lastName, LocalDate date)
     {
         int x = memberList.size() -1;
@@ -425,20 +518,35 @@ public class Library
         System.out.println("The member has been added.");
         System.out.println("****************************************");
         showAllMembers();
-        //Precheck? to see if the member is already there?
 
     }
+
+    /**
+     * This method takes the book title and the number of which to increase or decrease the quantity by.
+     */
     public void changeQuantity()
     {
         input.nextLine();
         System.out.println("Enter the book title: ");
         String bookTitle = input.nextLine();
-        System.out.println("Enter the quantity you want to change ('-' decreasing) ");
-        int stockQuan = input.nextInt();
-        input.nextLine();
-        changeQuantity(bookTitle, stockQuan);
+        try {
+            System.out.println("Enter the quantity you want to change ('-' decreasing) ");
+            int stockQuan = input.nextInt();
+            input.nextLine();
+            changeQuantity(bookTitle, stockQuan);
+        }catch(InputMismatchException e){
+            System.out.println("Input entered is not an integer");
+        }
 
     }
+
+    /**
+     * This method checks if the book exists and if it does, it checks the number of
+     * available copies to make sure that the number the user is decreasing by
+     * is not greater than the number of available copies.
+     * @param bTitle A String representing the book title
+     * @param bQuantity An integer stating the change of quantity
+     */
     public void changeQuantity(String bTitle, int bQuantity)
     {
         int available_copy;
@@ -489,6 +597,13 @@ public class Library
             }
         }
     }
+
+    /**
+     *
+     * @param books
+     * @param members
+     * @param bookLoans
+     */
     public void saveChanges(String books, String members, String bookLoans)
     {
         try

@@ -1,10 +1,15 @@
-100001,Data Mining Handbook,Robert Nisbet,1976,22
+100001,Data Mining Handbook,Robert Nisbet,1976,17
 100002,Birth of a Theorem,Cedric Villani,1980,5
 100003,Data Scientists at Work,Sebastian Gutierrez,1999,3
 100004,OO Design Using Java,James Nino:Frederick Hosch,1988,3
 100005,Objects First with Java,David Barnes:Michael Kolling,2001,4
 100006,Physics and Philosophy,Werner Heisenberg,1978,4
 100007,Making Software,Andy Oram,1982,5
-100008,Neural Networking,Tariq Rashid: Niha Gummakonda,2018,34
+100008,Neural Networking,Tariq Rashid: Niha Gummakonda,2018,14
 100009,Computer Networks,Harper Ford:Fay Ong,2015,13
 100010,Computer Science Book,Fay Ong,2008,6
+100011,Web Development,Abigail Lilley,2014,3
+100012,Data Structures,Will Dinnings,2006,6
+100013,Computer Book,David Wakeling:Fay Ong,2017,8
+100014,Harper is Mad,Fay Ong,2018,2
+100015,3,Jordan Bagambe,2016,8
