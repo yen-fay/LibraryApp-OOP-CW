@@ -595,7 +595,7 @@ public class Library
      * available copies to make sure that the number the user is decreasing by
      * is not greater than the number of available copies.
      * @param bTitle A String representing the book title
-     * @param bQuantity An integer stating the change of quantity
+     * @param bQuantity An integer stating the change of total quantity
      */
     public void changeQuantity(String bTitle, int bQuantity)
     {
