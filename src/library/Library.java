@@ -27,7 +27,6 @@ import java.time.temporal.ChronoUnit;
  */
 public class Library
 {
-    Scanner input = new Scanner(System.in);
     ArrayList<Book> bookList = new ArrayList<>();
     ArrayList<Member> memberList = new ArrayList<>();
     ArrayList<BookLoans> loansList = new ArrayList<>();
@@ -50,7 +49,7 @@ public class Library
      * @param filepath
      * @param type
      */
-    public void FileImport(String filepath, String type)
+    private void FileImport(String filepath, String type)
     {
      File newFile = new File(filepath);
      try{
@@ -76,6 +75,7 @@ public class Library
                   loansList.add(object);
                   break;
               }
+
           }
       }
     }
@@ -89,8 +89,10 @@ public class Library
     public void showAllBooks()
     {
      System.out.println("Books:");
+     //Looping through the book list
         for (Book x : bookList) {
             System.out.print(x.bookID + "," + x.title + ",");
+            //Creates another list for books with multiple authors
             for (int a = 0; a < x.author.length; a++) {
                 System.out.print(x.author[a]);
                 if (a != x.author.length - 1) {
@@ -128,9 +130,12 @@ public class Library
      */
     public void searchBook()
     {
+
+        Scanner input = new Scanner(System.in);
      System.out.println("Please input a keyword(s):");
      String bTitle = input.nextLine();
      searchBook(bTitle);
+
     }
 
     /**
@@ -171,7 +176,9 @@ public class Library
         }
         if (counter == 0)
         {
+            System.out.println("****************************************");
             System.out.println("Invalid keyword. Please try again.");
+            System.out.println("****************************************");
         }
     }
 
@@ -180,10 +187,12 @@ public class Library
      */
     public void searchMember()
     {
-        System.out.println("Please input a first name and last name:");
+        Scanner input = new Scanner(System.in);
+        System.out.println("Please enter a first name and last name:");
         String first_name = input.next();
         String last_name = input.next();
         searchMember(first_name, last_name);
+
     }
 
     /**
@@ -199,9 +208,14 @@ public class Library
             if (aMemberList.firstName.toLowerCase().equals(first_name.toLowerCase()) && aMemberList.lastName.toLowerCase().equals(last_name.toLowerCase())) {
                 Member c = aMemberList;
                 System.out.println("**********************************************");
+                System.out.println("Member information: ");
+                System.out.println("**********************************************");
                 System.out.println("ID: " + c.memberID);
                 System.out.println("Name: " + c.firstName + " " + c.lastName);
                 System.out.println("Date Joined: " + c.dateJoined);
+                System.out.println("**********************************************");
+                System.out.println("**********************************************");
+                System.out.println("Book(s) on loan: ");
                 System.out.println("**********************************************");
                 for (BookLoans aLoansList : loansList) {
                     if (c.memberID == aLoansList.memberID) {
@@ -235,10 +249,12 @@ public class Library
      */
     public void borrowBook()
     {
+        Scanner input = new Scanner(System.in);
         String lastName = "" ;
         String firstName = "";
         String bookTitle;
         boolean isValidInput = false;
+        //This loop makes sure that the member exists
         while (!isValidInput) {
             System.out.println("Enter your first and last name: ");
             firstName = input.next();
@@ -253,7 +269,7 @@ public class Library
             }
         }
         System.out.println("Enter a keyword: ");
-        bookTitle = System.console().readLine();
+        bookTitle = input.next();
         borrowBook(bookTitle, firstName, lastName);
     }
 
@@ -276,11 +292,15 @@ public class Library
         int bID = 0;
         int bQuantity = 0;
         int count = 0;
+        Scanner input = new Scanner(System.in);
         System.out.println("****************************************");
         System.out.println("Book(s) found: ");
         System.out.println("****************************************");
+        //Loops through the book list
         for (Book aBookList : bookList) {
+            //Checks if the keyword is contained in any of the book titles
             if (aBookList.title.toLowerCase().contains(bTitle.toLowerCase())) {
+                //Prints out all the books containing the keyword
                 System.out.println("ID: " + aBookList.bookID);
                 System.out.println("Title: " + aBookList.title);
                 System.out.print("Author(s): ");
@@ -299,12 +319,12 @@ public class Library
             System.out.println("*********************************************");
             System.out.println("No books containing the keyword exists. ");
             System.out.println("*********************************************");
-        } else {
 
+        } else {
             System.out.println("****************************************");
             System.out.println("Please enter the book title: ");
-            String bookTitle = System.console().readLine();
-
+            String bookTitle = input.nextLine();
+            //Checks if the book entered exists
             for (int i = 0; i < bookList.size(); i++) {
                 if (bookTitle.equalsIgnoreCase(bookList.get(i).title)) {
                     bID = bookList.get(i).bookID;
@@ -318,21 +338,25 @@ public class Library
 
                 }
             }
+            //Gets the member ID so that we can check the number of books they have on loan
             for (Member aMemberList : memberList) {
                 if (first_name.equalsIgnoreCase(aMemberList.firstName) && last_name.equalsIgnoreCase(aMemberList.lastName)) {
                     mID = aMemberList.memberID;
                 }
             }
             int number_on_loan = 0;
+            //Loops through the loan list and counts the number of books the member has on loan
             for (BookLoans aLoansList : loansList) {
                 if (mID == aLoansList.memberID) {
                     x += 1;
                 }
+                //Counts the number of books on loan for the title given
                 if (bID == aLoansList.bookID) {
                     number_on_loan += 1;
                 }
             }
             int available_copy = bQuantity - number_on_loan;
+            //If statements check to see if there are available copies
             if (foundBook) {
                 if (available_copy == 0) {
                     System.out.println("****************************************");
@@ -341,7 +365,7 @@ public class Library
                 } else {
                     isacValidInput = true;
                 }
-
+                // Checks to see if the member already has 5 books out
                 if (x < 5) {
                     isValidInput = true;
                 } else {
@@ -350,7 +374,7 @@ public class Library
                     System.out.println("********************************************************");
                 }
             }
-
+            //Book is loaned if all the conditions are okay
             if (isValidInput && isacValidInput) {
                 int a = loansList.size() - 1;
                 BookLoans b = loansList.get(a);
@@ -362,6 +386,7 @@ public class Library
                 System.out.println("****************************************");
             }
         }
+
     }
 
     /**
@@ -369,13 +394,18 @@ public class Library
      */
     public void returnBook()
     {
+        Scanner input = new Scanner(System.in);
+        //Makes sure an integer is inputted
         try {
             System.out.print("Enter your book loan ID: ");
             int bookLoanID = input.nextInt();
             returnBook(bookLoanID);
         }catch(InputMismatchException e){
+            System.out.println("***************************************");
             System.out.println("Input entered is not an integer");
+            System.out.println("***************************************");
         }
+
     }
 
     /**
@@ -386,9 +416,13 @@ public class Library
      */
     public void returnBook(int bID)
     {
+        Scanner input = new Scanner(System.in);
+        //Loops through the loan list
         for (int i = 0; i < loansList.size(); i++) {
+            //Checks to see if the bookloanID given by user matches any in the list
             if (bID == loansList.get(i).bookLoanID) {
                 LocalDate dueDate = loansList.get(i).dateBorrowed.plusDays(30);
+                //Returns it normally if the current date if before the due date
                 if ((dueDate == LocalDate.now()) || (dueDate.isAfter(LocalDate.now()))) {
                     loansList.remove(i);
                     System.out.println("****************************************");
@@ -396,6 +430,7 @@ public class Library
                     System.out.println("****************************************");
                     break;
                 } else {
+                    //Calculates fine if book is over due
                     long daysBetween = ChronoUnit.DAYS.between(dueDate, LocalDate.now());
                     float fine = (float) daysBetween * 10/100;
                     String answer;
@@ -404,6 +439,7 @@ public class Library
                         System.out.println("Your book is overdue. You must pay the fine of " + pound  + fine + "0, would you like to pay and return the book? (y/n)");
                         answer = input.next();
                     } while (!answer.equalsIgnoreCase("N") && !answer.equalsIgnoreCase( "Y"));
+                    //If user wants to pay and return, then it returns the book
                     if (answer.equalsIgnoreCase("Y")) {
                         loansList.remove(i);
                         System.out.println("****************************************");
@@ -420,7 +456,9 @@ public class Library
                 System.out.println("****************************************");
                 break;
             }
+
         }
+
     }
 
     /**
@@ -429,11 +467,12 @@ public class Library
      */
     public void addNewBook()
     {
+        Scanner input = new Scanner(System.in);
         String answer;
         boolean isFound = false;
-
         System.out.println("Enter the book title:");
         String bTitle = input.nextLine();
+        //Loops through to check if the book title given already exists
         for (Book aBookList : bookList) {
             if (bTitle.equalsIgnoreCase(aBookList.title)) {
                 isFound = true;
@@ -449,6 +488,7 @@ public class Library
                 }
             }
         }
+        //If user wants to carry on, then it carries on asking other questions
         if (!isFound){
             System.out.println("Enter the book author: (For multiple authors, separate using a colon ':')");
             String bAuthor = input.nextLine();
@@ -462,9 +502,12 @@ public class Library
                 input.nextLine();
                 addNewBook(bTitle, bAuthorList, year, bQuantity);
             }catch (InputMismatchException e){
+                System.out.println("***************************************");
                 System.out.println("Input entered is not an integer");
+                System.out.println("***************************************");
             }
         }
+
     }
 
     /**
@@ -476,6 +519,7 @@ public class Library
      */
     public void addNewBook(String bTitle, String[] bAuthorList, int year, int bQuantity)
     {
+            //The book is added
             int x = bookList.size() - 1;
             Book y = bookList.get(x);
             int z = y.bookID + 1;
@@ -485,7 +529,7 @@ public class Library
             System.out.println("****************************************");
             System.out.println("The book has been added.");
             System.out.println("****************************************");
-            showAllBooks();
+
     }
 
     /**
@@ -493,11 +537,14 @@ public class Library
      */
     public void addNewMember()
     {
+        Scanner input = new Scanner(System.in);
         System.out.println("Enter your first name:");
         String firstName = input.next();
         System.out.println("Enter your last name:");
         String lastName = input.next();
+        //The date is taken the the current date
         addNewMember(firstName, lastName, LocalDate.now());
+
     }
 
     /**
@@ -509,6 +556,7 @@ public class Library
      */
     public void addNewMember(String firstName, String lastName, LocalDate date)
     {
+        //Calculates the member ID and adds the member
         int x = memberList.size() -1;
         Member y = memberList.get(x);
         int z = y.memberID + 1;
@@ -517,7 +565,6 @@ public class Library
         System.out.println("****************************************");
         System.out.println("The member has been added.");
         System.out.println("****************************************");
-        showAllMembers();
 
     }
 
@@ -526,7 +573,7 @@ public class Library
      */
     public void changeQuantity()
     {
-        input.nextLine();
+        Scanner input = new Scanner(System.in);
         System.out.println("Enter the book title: ");
         String bookTitle = input.nextLine();
         try {
@@ -535,8 +582,11 @@ public class Library
             input.nextLine();
             changeQuantity(bookTitle, stockQuan);
         }catch(InputMismatchException e){
+            System.out.println("***************************************");
             System.out.println("Input entered is not an integer");
+            System.out.println("***************************************");
         }
+
 
     }
 
@@ -551,7 +601,7 @@ public class Library
     {
         int available_copy;
         for (int i = 0; i < bookList.size(); i++)
-        {
+        {   //Checks if the book title contains the user input
             if (bookList.get(i).title.toLowerCase().contains(bTitle.toLowerCase()))
             {
                 int number_of_copies = bookList.get(i).quantity;
@@ -559,14 +609,15 @@ public class Library
                 int number_on_loan = 0;
 
                 for (BookLoans aLoansList : loansList) {
+                    //Calculates number of the book on loan
                     if (ID == aLoansList.bookID) {
                         number_on_loan += 1;
                     }
                 }
                 available_copy = number_of_copies - number_on_loan;
-                //int newStock = available_copy + quantity;
+                //If the user wants to decrease the book quantity, it has to check available copies
                 if (bQuantity < 0 )
-                {
+                {   //Updates quantity only if there are enough available copies
                     if (available_copy >= Math.abs(bQuantity))
                     {
                         bookList.get(i).quantity = number_of_copies + bQuantity;
@@ -582,6 +633,7 @@ public class Library
                         break;
 
                     }
+                    //If user wants to increase it, it automatically updates it without any checks
                 } else {
                     bookList.get(i).quantity += bQuantity;
                     System.out.println("****************************************");
@@ -598,7 +650,7 @@ public class Library
         }
     }
 
-    /**
+    /** This method saves all of the changes made with the files
      *
      * @param books
      * @param members
